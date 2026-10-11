@@ -1,0 +1,334 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <title>NUX PACKAGE MANAGER SECURITY AUDIT - by loveshapedeyes</title>
+  <style type="text/css">
+    body {
+      background-color: #008080; /* Windows 95 Teal */
+      color: #000000;
+      font-family: "Times New Roman", Times, serif;
+      margin: 20px 0;
+    }
+    .layout-wrapper {
+      width: 94%;
+      max-width: 720px;
+      margin: 0 auto;
+    }
+    h1, h2, h3 {
+      font-family: Arial, Helvetica, sans-serif;
+      margin-top: 10px;
+      margin-bottom: 6px;
+    }
+    .win-box {
+      background-color: #C0C0C0;
+      border: 3px outset #FFFFFF;
+      padding: 10px 12px;
+      margin-bottom: 14px;
+    }
+    .win-titlebar {
+      background: linear-gradient(90deg, #000080, #1084d0);
+      color: #FFFFFF;
+      font-family: Arial, Helvetica, sans-serif;
+      font-weight: bold;
+      font-size: 13px;
+      padding: 3px 6px;
+      margin-bottom: 10px;
+    }
+    .status-bad {
+      font-weight: bold;
+      color: #FF0000;
+    }
+    table.data-table {
+      width: 100%;
+      border-collapse: collapse;
+      border: 2px inset #ffffff;
+      background-color: #ffffff;
+    }
+    table.data-table th {
+      background-color: #000080;
+      color: #ffffff;
+      font-family: Arial, sans-serif;
+      font-size: 11px;
+      text-align: left;
+      padding: 5px 4px;
+      border: 1px solid #808080;
+    }
+    table.data-table td {
+      font-size: 12px;
+      padding: 5px 4px;
+      border: 1px solid #808080;
+      vertical-align: top;
+      line-height: 1.3;
+    }
+    .crit {
+      background-color: #FFCCCC;
+      font-weight: bold;
+      color: #990000;
+    }
+    .high {
+      background-color: #FFE5CC;
+      font-weight: bold;
+      color: #CC6600;
+    }
+    .med {
+      background-color: #FFFFCC;
+      color: #886600;
+    }
+    pre, code {
+      font-family: "Courier New", Courier, monospace;
+      background-color: #000000;
+      color: #00FF66;
+      padding: 6px;
+      display: block;
+      overflow-x: auto;
+      font-size: 11px;
+      line-height: 1.35;
+    }
+    p {
+      line-height: 1.35;
+      margin: 8px 0;
+    }
+    ol, ul {
+      margin: 8px 0 8px 20px;
+      padding-left: 0;
+    }
+    li {
+      margin-bottom: 6px;
+      line-height: 1.35;
+    }
+    hr.bevel {
+      border: 0;
+      height: 2px;
+      border-top: 1px solid #808080;
+      border-bottom: 1px solid #ffffff;
+      margin: 10px 0;
+    }
+    .btn-top {
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 12px;
+      font-weight: bold;
+      color: #000000;
+      background-color: #C0C0C0;
+      border: 2px outset #FFFFFF;
+      padding: 5px 16px;
+      text-decoration: none;
+      display: inline-block;
+    }
+    .btn-top:active {
+      border: 2px inset #FFFFFF;
+    }
+  </style>
+</head>
+
+<body>
+<a name="top"></a>
+
+<div class="layout-wrapper">
+
+  <!-- HEADER BANNER -->
+  <div class="win-box">
+    <div class="win-titlebar">
+      <span>C:\NUX\SECURITY_AUDIT_REPORT.TXT - Notepad (by loveshapedeyes)</span>
+    </div>
+
+    <center>
+      <font size="5" color="#800000"><b>THE NUX PACKAGE MANAGER SECURITY REPORT</b></font><br>
+      <font size="3"><i>Author: <a href="../index.html" style="color: #000080;">loveshapedeyes</a></i></font><br>
+      <font size="2">Source Code Vulnerability Assessment for Nucora Linux "nux" Package Manager</font>
+      <hr class="bevel">
+      <font size="2">
+        <b>Audited Software:</b> <code>nux v8.4.10 ("Obsidian Engine")</code><br>
+        <b>Target Platform:</b> Nucora ST 3.0 &nbsp;|&nbsp; 
+        <b>Security Verdict:</b> <span class="status-bad">FAIL / CRITICAL RISK</span>
+      </font>
+      <br><br>
+      <a href="../index.html" class="btn-top">&laquo; Return to index.html</a>
+    </center>
+  </div>
+
+  <!-- EXECUTIVE SUMMARY -->
+  <div class="win-box">
+    <div class="win-titlebar"><b>SECTION 1: EXECUTIVE VERDICT</b></div>
+    <table width="100%" cellpadding="6" cellspacing="2">
+      <tr>
+        <td width="130" align="center" bgcolor="#FFFFCC" style="border: 2px groove #808080;">
+          <font size="4" color="#FF0000"><b>NOT SECURE</b></font><br>
+          <small>Requires Complete Overhaul</small>
+        </td>
+        <td>
+          <p>
+            While <b>nux</b> introduces helpful ideas (atomic state switches, snapshots, lock files), the codebase operates entirely as <b>UID 0 (root)</b> while performing several operations that are known in security engineering to lead to <b>instant local privilege escalation (LPE)</b> and <b>remote arbitrary code execution (RCE)</b>.
+          </p>
+          <p>
+            <b>Primary Danger:</b> Anyone who controls an untrusted package or can tamper with network traffic can gain full root control of the host machine with zero exploitation resistance.
+          </p>
+        </td>
+      </tr>
+    </table>
+  </div>
+
+  <!-- VULNERABILITY SCOREBOARD -->
+  <div class="win-box">
+    <div class="win-titlebar"><b>SECTION 2: COMPLETE VULNERABILITY SCOREBOARD</b></div>
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th width="6%">ID</th>
+          <th width="14%">Severity</th>
+          <th width="24%">Vulnerability</th>
+          <th width="24%">Source Location</th>
+          <th width="32%">Impact</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td align="center"><b>01</b></td>
+          <td class="crit" align="center">CRITICAL</td>
+          <td><b>`ldd` on Untrusted Files</b></td>
+          <td><code>cmd/key.go:181</code><br><code>cmd/checkdeps.go:44</code></td>
+          <td>Executing <code>ldd</code> invokes the dynamic linker (<code>ld.so</code>). Malicious ELF files can run init constructors as root.</td>
+        </tr>
+        <tr>
+          <td align="center"><b>02</b></td>
+          <td class="crit" align="center">CRITICAL</td>
+          <td><b>Blind Execution of Binaries</b></td>
+          <td><code>cmd/key.go:192-205</code></td>
+          <td>When QA testing is enabled, every new binary in <code>/usr/bin/</code> is directly run via <code>exec.Command(f, "--version")</code> as root.</td>
+        </tr>
+        <tr>
+          <td align="center"><b>03</b></td>
+          <td class="crit" align="center">CRITICAL</td>
+          <td><b>SUID Auto-Escalation Trap</b></td>
+          <td><code>cmd/doctor.go:94</code><br><code>cmd/triggers.go:139</code></td>
+          <td><code>doctor</code> & triggers run <code>chown 0:0</code> and <code>chmod 4755</code> (setuid root) on specific binary names without checking file hashes.</td>
+        </tr>
+        <tr>
+          <td align="center"><b>04</b></td>
+          <td class="crit" align="center">CRITICAL</td>
+          <td><b>No Digital Signatures</b></td>
+          <td><code>cmd/update.go:264</code><br><code>cmd/install.go:242</code></td>
+          <td>No GPG / Ed25519 signatures on <code>packages.list</code>. SHA-256 comes from untrusted plaintext network data. MITM = root takeover.</td>
+        </tr>
+        <tr>
+          <td align="center"><b>05</b></td>
+          <td class="high" align="center">HIGH</td>
+          <td><b>Arbitrary File Overwrite</b></td>
+          <td><code>cmd/install.go:462</code><br><code>cmd/localinstall.go:44</code></td>
+          <td>Packages can write to paths like <code>/root/.ssh/authorized_keys</code> or <code>/etc/sudoers</code> without safe path boundaries.</td>
+        </tr>
+        <tr>
+          <td align="center"><b>06</b></td>
+          <td class="high" align="center">HIGH</td>
+          <td><b>Unrestricted SUID Unpack</b></td>
+          <td><code>cmd/install.go:526-532</code></td>
+          <td>Package archives are allowed to set SUID/SGID permissions directly on the target machine when extracted.</td>
+        </tr>
+        <tr>
+          <td align="center"><b>07</b></td>
+          <td class="high" align="center">HIGH</td>
+          <td><b>`/tmp` Race Conditions</b></td>
+          <td><code>bootstrap/install.sh:6-10</code></td>
+          <td>Uses static paths <code>/tmp/nux.nux</code> and <code>/tmp/nux</code> in world-writable <code>/tmp</code>. Vulnerable to symlink attacks.</td>
+        </tr>
+        <tr>
+          <td align="center"><b>08</b></td>
+          <td class="med" align="center">MEDIUM</td>
+          <td><b>Silent Telemetry / Remote Track Control</b></td>
+          <td><code>cmd/telemetry.go:54, 122</code></td>
+          <td>Collects hardware hashes without user consent. Telemetry response can remotely switch the user's release track.</td>
+        </tr>
+        <tr>
+          <td align="center"><b>09</b></td>
+          <td class="med" align="center">MEDIUM</td>
+          <td><b>Stale Lock DoS</b></td>
+          <td><code>cmd/lock.go:16</code></td>
+          <td>Uses file creation instead of kernel <code>flock(2)</code>. If process crashes or receives <code>SIGKILL</code>, nux locks itself permanently.</td>
+        </tr>
+        <tr>
+          <td align="center"><b>10</b></td>
+          <td class="med" align="center">MEDIUM</td>
+          <td><b>Size-Only Cache Check</b></td>
+          <td><code>cmd/download.go:85</code></td>
+          <td>Cache check only compares <code>file.Size == pkg.Size</code>. Corrupted or tampered files with matching length pass cache checks.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- DEEP DIVE SECTION -->
+  <div class="win-box">
+    <div class="win-titlebar"><b>SECTION 3: CODE SNIPPET AUTOPSY</b></div>
+
+    <!-- ISSUE 1 -->
+    <h3>1. The 'ldd' Trap (`cmd/key.go` & `cmd/checkdeps.go`)</h3>
+    <p>The code invokes the system <code>ldd</code> utility directly on files unpacked from packages:</p>
+    <pre>// From cmd/key.go (Line 180):
+for _, f := range files {
+    if strings.HasSuffix(f, ".so") || strings.Contains(f, ".so.") {
+        out, err := exec.Command("ldd", f).CombinedOutput() // &lt;-- CODE EXECUTION!
+        if err == nil && strings.Contains(string(out), "not found") {
+            lddClean = false
+            break
+        }
+    }
+}</pre>
+    <p>
+      <b>Why this breaks security:</b> On glibc-based systems, running <code>ldd</code> on an untrusted ELF file or shared object actually runs the dynamic linker, which can execute code from the library (e.g. init routines or custom ELF interpreters).
+    </p>
+
+    <hr class="bevel">
+
+    <!-- ISSUE 2 -->
+    <h3>2. Unverified SUID Escalation (`cmd/doctor.go`)</h3>
+    <p>The system doctor attempts to "fix" broken permissions by blessing files with setuid root:</p>
+    <pre>// From cmd/doctor.go (Line 92):
+for p, m := range sm {
+    if i, err := os.Lstat(p); err == nil && i.Mode()&os.ModeSetuid == 0 {
+        os.Chown(p, 0, 0);       // Chown to root!
+        os.Chmod(p, m);          // Set ModeSetuid (4755)!
+        sf++
+    }
+}</pre>
+    <p>
+      <b>Why this breaks security:</b> It does not check if the binary at <code>/usr/bin/sudo</code> or <code>/usr/bin/pkexec</code> is genuine. If a rogue user or script drops a custom backdoor binary there, running <code>nux doctor</code> automatically turns it into a setuid-root binary.
+    </p>
+
+    <hr class="bevel">
+
+    <!-- ISSUE 3 -->
+    <h3>3. Plaintext Index & Missing Signatures (`cmd/update.go`)</h3>
+    <pre>// From cmd/update.go (Line 264):
+body, newIndex, status, headers, err := fetchPackagesList(getStableListURL(), meta)
+// ...
+os.WriteFile(IndexCache, merged, 0644)</pre>
+    <p>
+      <b>Why this breaks security:</b> The package manager downloads <code>packages.list</code> over plain HTTP/HTTPS without verifying a digital signature (such as PGP/GPG or Ed25519). If an attacker tampers with the web server, DNS, or mirror, they can inject malicious packages with matching SHA-256 hashes.
+    </p>
+  </div>
+
+  <!-- HOW TO FIX IT (REMEDIATION) -->
+  <div class="win-box">
+    <div class="win-titlebar"><b>SECTION 4: SYSTEM REPAIR CHECKLIST (HOW TO FIX)</b></div>
+    <ol>
+      <li><b>Replace <code>ldd</code> with static ELF parsing:</b> Use Go's built-in <code>debug/elf</code> package to inspect <code>ImportedLibraries()</code> without executing the binaries.</li>
+      <li><b>Implement Digital Signatures:</b> Sign <code>packages.list</code> with an Ed25519 or GPG private key and ship the public key with <code>nux</code>. Reject any repo update that fails verification.</li>
+      <li><b>Stop Running Installed Binaries:</b> Remove <code>exec.Command(f, "--version")</code> from root-level QA hooks.</li>
+      <li><b>Enforce Safe Extraction Whitelist:</b> Restrict package unpacking strictly to <code>/usr</code> and sanitized paths; forbid <code>..</code> paths, and never overwrite without backup in local-install.</li>
+      <li><b>Use Kernel File Locking:</b> Replace <code>os.OpenFile(..., O_EXCL)</code> with <code>golang.org/x/sys/unix.Flock()</code> so locks release automatically if a crash occurs.</li>
+      <li><b>Secure the Bootstrap Script:</b> Use <code>mktemp -d</code> with restricted permissions (0700) instead of predictable <code>/tmp</code> filenames.</li>
+    </ol>
+  </div>
+
+  <!-- NAVIGATION BUTTONS -->
+  <center>
+    <br>
+    <a href="../index.html" class="btn-top">&laquo; Return to index.html</a> &nbsp;
+    <a href="#top" class="btn-top">[ Back to Top ]</a>
+    <br><br>
+  </center>
+
+</div>
+
+</body>
+</html>

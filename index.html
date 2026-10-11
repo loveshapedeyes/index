@@ -1,0 +1,183 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <title>loveshapedeyes - Security Research Lab</title>
+  <style type="text/css">
+    body {
+      background-color: #008080; /* Windows 95 Teal */
+      color: #000000;
+      font-family: "Times New Roman", Times, serif;
+      margin: 20px 0;
+    }
+    .layout-wrapper {
+      width: 94%;
+      max-width: 720px;
+      margin: 0 auto;
+    }
+    h1, h2, h3 {
+      font-family: Arial, Helvetica, sans-serif;
+      margin-top: 10px;
+      margin-bottom: 6px;
+    }
+    .win-box {
+      background-color: #C0C0C0;
+      border: 3px outset #FFFFFF;
+      padding: 10px 12px;
+      margin-bottom: 14px;
+    }
+    .win-titlebar {
+      background: linear-gradient(90deg, #000080, #1084d0);
+      color: #FFFFFF;
+      font-family: Arial, Helvetica, sans-serif;
+      font-weight: bold;
+      font-size: 13px;
+      padding: 3px 6px;
+      margin-bottom: 10px;
+    }
+    table.data-table {
+      width: 100%;
+      border-collapse: collapse;
+      border: 2px inset #ffffff;
+      background-color: #ffffff;
+    }
+    table.data-table th {
+      background-color: #000080;
+      color: #ffffff;
+      font-family: Arial, sans-serif;
+      font-size: 11px;
+      text-align: left;
+      padding: 5px 6px;
+      border: 1px solid #808080;
+    }
+    table.data-table td {
+      font-size: 12px;
+      padding: 6px;
+      border: 1px solid #808080;
+      vertical-align: top;
+      line-height: 1.35;
+    }
+    .badge-crit {
+      background-color: #990000;
+      color: #FFFFFF;
+      font-family: Arial, sans-serif;
+      font-size: 10px;
+      font-weight: bold;
+      padding: 1px 4px;
+    }
+    p {
+      line-height: 1.4;
+      margin: 8px 0;
+    }
+    hr.bevel {
+      border: 0;
+      height: 2px;
+      border-top: 1px solid #808080;
+      border-bottom: 1px solid #ffffff;
+      margin: 10px 0;
+    }
+    .btn-action {
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 12px;
+      font-weight: bold;
+      color: #000000;
+      background-color: #C0C0C0;
+      border: 2px outset #FFFFFF;
+      padding: 4px 12px;
+      text-decoration: none;
+      display: inline-block;
+    }
+    .btn-action:active {
+      border: 2px inset #FFFFFF;
+    }
+    a {
+      color: #0000CC;
+    }
+    a:visited {
+      color: #800080;
+    }
+  </style>
+</head>
+
+<body>
+<a name="top"></a>
+
+<div class="layout-wrapper">
+
+  <!-- HEADER -->
+  <div class="win-box">
+    <div class="win-titlebar">
+      <span>C:\LOVESHAPEDEYES\INDEX.HTM - Personal Security Workstation</span>
+    </div>
+
+    <center>
+      <font size="6" color="#000080"><b>LOVESHAPEDEYES</b></font><br>
+      <font size="3"><b>Security Researcher & Vulnerability Analyst</b></font><br>
+      <font size="2">Specializing in Linux Systems, Source Code Audits & Low-Level Security</font>
+    </center>
+  </div>
+
+  <!-- ABOUT SECTION -->
+  <div class="win-box">
+    <div class="win-titlebar"><b>SECTION 1: RESEARCHER PROFILE</b></div>
+    <table width="100%" cellpadding="6" cellspacing="2">
+      <tr>
+        <td width="130" align="center" bgcolor="#FFFFFF" style="border: 2px inset #808080; padding: 2px;">
+          <img src="etc/1.jpg" alt="loveshapedeyes" width="130" height="130" style="display: block;">
+        </td>
+        <td style="padding-left: 12px; vertical-align: middle;">
+          <p>
+            Welcome to my security research homepage. I am loveshapedeyes, an independent vulnerability researcher focusing on Unix/Linux system software.
+          </p>
+        </td>
+      </tr>
+    </table>
+  </div>
+
+  <!-- PUBLISHED RESEARCH -->
+  <div class="win-box">
+    <div class="win-titlebar"><b>SECTION 2: RESEARCH PUBLICATIONS & CODE AUDITS</b></div>
+    <p>Below is my published research documentation, vulnerability advisories, and source code reviews:</p>
+
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th width="14%">Date</th>
+          <th width="15%">Severity</th>
+          <th width="45%">Title & Advisory Link</th>
+          <th width="26%">Target System</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><b>OCT 2026</b></td>
+          <td align="center"><span class="badge-crit">CRITICAL</span></td>
+          <td>
+            <a href="research/nux-security-audit-8-4-10.html"><b>Comprehensive Security Audit: Nux Package Manager</b></a>
+            <br>
+            <small style="color: #444444;">
+              Source code review of the Nucora Linux package manager. Identifies dynamic linker code execution via <code>ldd</code>, unauthenticated index updates, root binary execution, and SUID permission flaws.
+            </small>
+          </td>
+          <td><code>nux v8.4.10<br>(Nucora Linux)</code></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <br>
+    <center>
+      <a href="research/nux-security-audit-8-4-10.html" class="btn-action">Open Latest Advisory: nux Security Audit &raquo;</a>
+    </center>
+  </div>
+
+  <!-- BACK TO TOP BUTTON -->
+  <center>
+    <br>
+    <a href="#top" class="btn-action">[ Back to Top ]</a>
+    <br><br>
+  </center>
+
+</div>
+
+</body>
+</html>
