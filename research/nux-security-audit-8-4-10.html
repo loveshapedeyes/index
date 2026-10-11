@@ -151,10 +151,6 @@
     <div class="win-titlebar"><b>SECTION 1: EXECUTIVE VERDICT</b></div>
     <table width="100%" cellpadding="6" cellspacing="2">
       <tr>
-        <td width="130" align="center" bgcolor="#FFFFCC" style="border: 2px groove #808080;">
-          <font size="4" color="#FF0000"><b>NOT SECURE</b></font><br>
-          <small>Requires Complete Overhaul</small>
-        </td>
         <td>
           <p>
             While <b>nux</b> introduces helpful ideas (atomic state switches, snapshots, lock files), the codebase operates entirely as <b>UID 0 (root)</b> while performing several operations that are known in security engineering to lead to <b>instant local privilege escalation (LPE)</b> and <b>remote arbitrary code execution (RCE)</b>.
